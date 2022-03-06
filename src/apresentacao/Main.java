@@ -5,16 +5,13 @@ import java.awt.Image;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -31,9 +28,7 @@ public class Main extends javax.swing.JFrame {
     private int largura;
     private int altura;
 
-    /**
-     * Creates new form Tela
-     */
+  
     public Main() {
         initComponents();
         this.imagem.setText("");
@@ -282,6 +277,10 @@ public class Main extends javax.swing.JFrame {
 
     private void buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonActionPerformed
         this.jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        
+        this.vetFotos = null;
+        this.posAtualVetFoto = 0;
+        
         try {
             this.jFileChooser1.setCurrentDirectory(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
 //          this.jFileChooser1.setCurrentDirectory(new File("/home"));
@@ -289,7 +288,7 @@ public class Main extends javax.swing.JFrame {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        int res = this.jFileChooser1.showOpenDialog(null);
+        int res = this.jFileChooser1.showOpenDialog(this);
         if (res == JFileChooser.APPROVE_OPTION) {
             File diretorio = this.jFileChooser1.getSelectedFile();
             String dir = diretorio.getAbsolutePath();
@@ -491,7 +490,7 @@ public class Main extends javax.swing.JFrame {
             ArrayList<File> vetAux = new ArrayList();
             File vetResultado[] = null;
             for (File file : vet) {
-                if (file.getName().contains(".jpg") || file.getName().contains(".png")) {       
+                if (file.getName().contains(".jpg") || file.getName().contains(".png") || file.getName().contains(".jpeg")) {       
                    vetAux.add(file);
                 }  
             }
