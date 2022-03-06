@@ -3,10 +3,10 @@
 1) Execute via terminal:
 
 ```sh
-java -jar ___/dist/PhotoBodyClassify.jar___ ou 
+java -jar ___/dist/PhotoBodyClassify.jar___ 
 ```
 
-2) Dê 2 cliques no arquivo .jar (caso tenha a jdk do java corretamente instalado na máquina)
+2) Ou dê 2 cliques no arquivo .jar (caso tenha a jdk do java corretamente instalado na máquina)
 
 Obs: pode ser necessário dar permissão de execução ao .jar:
 ```sh
