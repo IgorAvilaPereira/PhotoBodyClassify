@@ -21,19 +21,18 @@ import javax.swing.JOptionPane;
  * @author iapereira
  */
 public class Main extends javax.swing.JFrame {
-
-    private File[] vetFotos;
-    private int posAtualVetFoto;
-    private String pastaSelecionada;
-    private int largura;
-    private int altura;
+    private File[] vetFoto;
+    private int indiceCorrenteVetFoto;
+    private String diretorioEscolhido;
+    private final int larguraFoto;
+    private final int alturaFoto;
 
   
     public Main() {
         initComponents();
         this.imagem.setText("");
-        this.largura = 400;
-        this.altura = 400;
+        this.larguraFoto = 400;
+        this.alturaFoto = 400;
         this.setResizable(false);
         
         this.testarPasta("./pescoco/");
@@ -278,8 +277,8 @@ public class Main extends javax.swing.JFrame {
     private void buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonActionPerformed
         this.jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         
-        this.vetFotos = null;
-        this.posAtualVetFoto = 0;
+        this.vetFoto = null;
+        this.indiceCorrenteVetFoto = 0;
         
         try {
             this.jFileChooser1.setCurrentDirectory(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
@@ -292,22 +291,23 @@ public class Main extends javax.swing.JFrame {
         if (res == JFileChooser.APPROVE_OPTION) {
             File diretorio = this.jFileChooser1.getSelectedFile();
             String dir = diretorio.getAbsolutePath();
-            System.out.println(diretorio.getAbsolutePath());
+//            System.out.println(diretorio.getAbsolutePath());
             JOptionPane.showMessageDialog(this, "Diretório Selecionado: " + diretorio.getAbsolutePath());
-            this.pastaSelecionada = diretorio.getName();
+            this.diretorioEscolhido = diretorio.getName();
 //          JOptionPane.showMessageDialog(null, "Você escolheu o diretório: " + diretorio.getCanonicalPath());
 //          JOptionPane.showMessageDialog(null, "Você escolheu o diretório: " + diretorio.getPath());
             File caminho = new File(dir);
             File caminhoCompleto = caminho.getAbsoluteFile();
 //            this.vetFotos = caminhoCompleto.listFiles();            
-            this.vetFotos = this.getFotosDoDiretorio(caminhoCompleto.listFiles());            
-            if (this.vetFotos != null){
-                ImageIcon imageIcon = new ImageIcon(this.vetFotos[0].getAbsolutePath());
-                this.posAtualVetFoto = 0;
+            this.vetFoto = this.getFotosDoDiretorio(caminhoCompleto.listFiles());            
+            if (this.vetFoto != null){
+                ImageIcon imageIcon = new ImageIcon(this.vetFoto[0].getAbsolutePath());
+                this.indiceCorrenteVetFoto = 0;
                 Image image = imageIcon.getImage();
-                Image newimg = image.getScaledInstance(this.largura, this.altura, java.awt.Image.SCALE_SMOOTH);
+                Image newimg = image.getScaledInstance(this.larguraFoto, this.alturaFoto, java.awt.Image.SCALE_SMOOTH);
                 ImageIcon newImageIcon = new ImageIcon(newimg);
                 this.imagem.setIcon(newImageIcon);
+                this.label_NroFoto.setText(this.indiceCorrenteVetFoto+1+"/"+this.vetFoto.length);
             } else {
                 JOptionPane.showMessageDialog(this, "Esse diretório não tem nenhuma foto!!!");
             }
@@ -335,14 +335,14 @@ public class Main extends javax.swing.JFrame {
         } else if (this.costa.isSelected()) {
             pasta = "./costa/";
         }
-        if (!"".equals(pasta) && this.vetFotos != null) {
+        if (!"".equals(pasta) && this.vetFoto != null) {
             try {
-                this.copyDirectory(new File(this.vetFotos[this.posAtualVetFoto].getAbsolutePath()), new File(pasta + this.pastaSelecionada + "_" + this.vetFotos[this.posAtualVetFoto].getName()));
+                this.copyDirectory(new File(this.vetFoto[this.indiceCorrenteVetFoto].getAbsolutePath()), new File(pasta + this.diretorioEscolhido + "_" + this.vetFoto[this.indiceCorrenteVetFoto].getName()));
             } catch (IOException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
             this.proximaFoto();
-        } else if (this.vetFotos == null) {
+        } else if (this.vetFoto == null) {
             JOptionPane.showMessageDialog(this, "Selecione alguma pasta com fotos!!!");
         } else if (pasta.equals("")) {
             JOptionPane.showMessageDialog(this, "Qual parte do corpo seria?");
@@ -434,33 +434,35 @@ public class Main extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void proximaFoto() {
-        if (this.vetFotos == null){
+        if (this.vetFoto == null){
             JOptionPane.showMessageDialog(this, "Selecione alguma pasta com fotos!!!");            
-        } else if (this.posAtualVetFoto + 1 < this.vetFotos.length) {
-            this.posAtualVetFoto++;
-            ImageIcon imageIcon = new ImageIcon(this.vetFotos[this.posAtualVetFoto].getAbsolutePath());
+        } else if (this.indiceCorrenteVetFoto + 1 < this.vetFoto.length) {
+            this.indiceCorrenteVetFoto++;
+            ImageIcon imageIcon = new ImageIcon(this.vetFoto[this.indiceCorrenteVetFoto].getAbsolutePath());
             Image image = imageIcon.getImage();
-            Image newimg = image.getScaledInstance(this.largura, this.altura, java.awt.Image.SCALE_SMOOTH);
+            Image newimg = image.getScaledInstance(this.larguraFoto, this.alturaFoto, java.awt.Image.SCALE_SMOOTH);
             ImageIcon newImageIcon = new ImageIcon(newimg);
             this.imagem.setIcon(newImageIcon);
+            this.label_NroFoto.setText(this.indiceCorrenteVetFoto+1+"/"+this.vetFoto.length); 
+            this.btn_anterior.setEnabled(true);
         } else {
             this.btn_proxima.setEnabled(false);
-            this.btn_anterior.setEnabled(true);
         }
     }
 
     private void anteriorFoto() {
-           if (this.vetFotos == null){
+        if (this.vetFoto == null){
             JOptionPane.showMessageDialog(this, "Selecione alguma pasta com fotos!!!");            
-        } else if (this.posAtualVetFoto != 0) {
-            if (this.posAtualVetFoto == 1) {
+        } else if (this.indiceCorrenteVetFoto != 0) {
+            if (this.indiceCorrenteVetFoto == 1) {
                 this.btn_anterior.setEnabled(false);
             }
             this.btn_proxima.setEnabled(true);
-            this.posAtualVetFoto--;
-            ImageIcon imageIcon = new ImageIcon(this.vetFotos[this.posAtualVetFoto].getAbsolutePath());
+            this.label_NroFoto.setText(this.indiceCorrenteVetFoto+"/"+this.vetFoto.length);
+            this.indiceCorrenteVetFoto--;
+            ImageIcon imageIcon = new ImageIcon(this.vetFoto[this.indiceCorrenteVetFoto].getAbsolutePath());
             Image image = imageIcon.getImage(); // transform it 
-            Image newimg = image.getScaledInstance(this.largura, this.altura, java.awt.Image.SCALE_SMOOTH); // scale it smoothly  
+            Image newimg = image.getScaledInstance(this.larguraFoto, this.alturaFoto, java.awt.Image.SCALE_SMOOTH); // scale it smoothly  
             ImageIcon newImageIcon = new ImageIcon(newimg);  // assign to a new I
             this.imagem.setIcon(newImageIcon);
         } else {
