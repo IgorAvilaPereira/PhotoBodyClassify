@@ -26,20 +26,47 @@ public class Main extends javax.swing.JFrame {
     private String diretorioEscolhido;
     private final int larguraFoto;
     private final int alturaFoto;
+    private String idioma;
 
-  
     public Main() {
         initComponents();
         this.imagem.setText("");
         this.larguraFoto = 400;
         this.alturaFoto = 400;
         this.setResizable(false);
-        
         this.testarPasta("./pescoco/");
         this.testarPasta("./coxa/");
         this.testarPasta("./costa/");
         this.testarPasta("./perna/");
         this.testarPasta("./braco/");
+        idioma = "pt-br";
+        
+        Object[] options = {"Pt-br", "Eng"};
+        int n = JOptionPane.showOptionDialog(this, "Language/Idioma:", "PhotoBodyClassify",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null, //don't use a custom Icon
+                options, //the titles of buttons
+                options[0]); //default button title
+        if (n == 1) {
+            this.idioma = "en";
+        }
+        if (this.idioma.equals("en")) {
+            this.pescoco.setText("Neck");
+            this.braco.setText("Arm");
+            this.costa.setText("Back");
+            this.coxa.setText("Thigh");
+            this.perna.setText("Leg");
+            this.btn_proxima.setText("Next");
+            this.btn_anterior.setText("Previous");
+            this.btn_registrar.setText("Classify");
+            this.button.setText("Open Folder");
+            this.btn_abrirPastaPescoco.setText("Neck Folder");
+            this.btn_abrirPastaBraco.setText("Arm Folder");
+            this.btn_abrirPastaCosta.setText("Back Folder");
+            this.btn_abrirPastaCoxa.setText("Thigh Folder");
+            this.btn_abrirPastaPerna.setText("Leg Folder");
+        }
 
 //            System.exit(0);
 //            for (File imagem : vetFile) {
@@ -276,10 +303,10 @@ public class Main extends javax.swing.JFrame {
 
     private void buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonActionPerformed
         this.jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        
+
         this.vetFoto = null;
         this.indiceCorrenteVetFoto = 0;
-        
+
         try {
             this.jFileChooser1.setCurrentDirectory(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
 //          this.jFileChooser1.setCurrentDirectory(new File("/home"));
@@ -292,24 +319,32 @@ public class Main extends javax.swing.JFrame {
             File diretorio = this.jFileChooser1.getSelectedFile();
             String dir = diretorio.getAbsolutePath();
 //            System.out.println(diretorio.getAbsolutePath());
-            JOptionPane.showMessageDialog(this, "Diretório Selecionado: " + diretorio.getAbsolutePath());
+            if (this.idioma.equals("en")) {
+                JOptionPane.showMessageDialog(this, "Folder Selected: " + diretorio.getAbsolutePath());
+            } else {
+                JOptionPane.showMessageDialog(this, "Diretório Selecionado: " + diretorio.getAbsolutePath());
+            }
             this.diretorioEscolhido = diretorio.getName();
 //          JOptionPane.showMessageDialog(null, "Você escolheu o diretório: " + diretorio.getCanonicalPath());
 //          JOptionPane.showMessageDialog(null, "Você escolheu o diretório: " + diretorio.getPath());
             File caminho = new File(dir);
             File caminhoCompleto = caminho.getAbsoluteFile();
 //            this.vetFotos = caminhoCompleto.listFiles();            
-            this.vetFoto = this.getFotosDoDiretorio(caminhoCompleto.listFiles());            
-            if (this.vetFoto != null){
+            this.vetFoto = this.getFotosDoDiretorio(caminhoCompleto.listFiles());
+            if (this.vetFoto != null) {
                 ImageIcon imageIcon = new ImageIcon(this.vetFoto[0].getAbsolutePath());
                 this.indiceCorrenteVetFoto = 0;
                 Image image = imageIcon.getImage();
                 Image newimg = image.getScaledInstance(this.larguraFoto, this.alturaFoto, java.awt.Image.SCALE_SMOOTH);
                 ImageIcon newImageIcon = new ImageIcon(newimg);
                 this.imagem.setIcon(newImageIcon);
-                this.label_NroFoto.setText(this.indiceCorrenteVetFoto+1+"/"+this.vetFoto.length);
+                this.label_NroFoto.setText(this.indiceCorrenteVetFoto + 1 + "/" + this.vetFoto.length);
             } else {
-                JOptionPane.showMessageDialog(this, "Esse diretório não tem nenhuma foto!!!");
+                if (this.idioma.equals("en")) {
+                    JOptionPane.showMessageDialog(this, "There aren't figures!!!");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Esse diretório não tem nenhuma foto!!!");
+                }
             }
         }
     }//GEN-LAST:event_buttonActionPerformed
@@ -343,9 +378,17 @@ public class Main extends javax.swing.JFrame {
             }
             this.proximaFoto();
         } else if (this.vetFoto == null) {
-            JOptionPane.showMessageDialog(this, "Selecione alguma pasta com fotos!!!");
+            if (this.idioma.equals("en")) {
+                JOptionPane.showMessageDialog(this, "you must select a folder with figures!!!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Selecione alguma pasta com fotos!!!");
+            }
         } else if (pasta.equals("")) {
-            JOptionPane.showMessageDialog(this, "Qual parte do corpo seria?");
+            if (this.idioma.equals("en")) {
+                JOptionPane.showMessageDialog(this, "Which body part?!!!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Qual parte do corpo seria?");
+            }
         }
         this.pescoco.setSelected(false);
         this.braco.setSelected(false);
@@ -434,8 +477,13 @@ public class Main extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void proximaFoto() {
-        if (this.vetFoto == null){
-            JOptionPane.showMessageDialog(this, "Selecione alguma pasta com fotos!!!");            
+        if (this.vetFoto == null) {
+//          JOptionPane.showMessageDialog(this, "Selecione alguma pasta com fotos!!!");
+            if (this.idioma.equals("en")) {
+                JOptionPane.showMessageDialog(this, "you must select a folder with figures!!!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Selecione alguma pasta com fotos!!!");
+            }
         } else if (this.indiceCorrenteVetFoto + 1 < this.vetFoto.length) {
             this.indiceCorrenteVetFoto++;
             ImageIcon imageIcon = new ImageIcon(this.vetFoto[this.indiceCorrenteVetFoto].getAbsolutePath());
@@ -443,7 +491,7 @@ public class Main extends javax.swing.JFrame {
             Image newimg = image.getScaledInstance(this.larguraFoto, this.alturaFoto, java.awt.Image.SCALE_SMOOTH);
             ImageIcon newImageIcon = new ImageIcon(newimg);
             this.imagem.setIcon(newImageIcon);
-            this.label_NroFoto.setText(this.indiceCorrenteVetFoto+1+"/"+this.vetFoto.length); 
+            this.label_NroFoto.setText(this.indiceCorrenteVetFoto + 1 + "/" + this.vetFoto.length);
             this.btn_anterior.setEnabled(true);
         } else {
             this.btn_proxima.setEnabled(false);
@@ -451,14 +499,18 @@ public class Main extends javax.swing.JFrame {
     }
 
     private void anteriorFoto() {
-        if (this.vetFoto == null){
-            JOptionPane.showMessageDialog(this, "Selecione alguma pasta com fotos!!!");            
+        if (this.vetFoto == null) {
+            if (this.idioma.equals("en")) {
+                JOptionPane.showMessageDialog(this, "you must select a folder with figures!!!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Selecione alguma pasta com fotos!!!");
+            }
         } else if (this.indiceCorrenteVetFoto != 0) {
             if (this.indiceCorrenteVetFoto == 1) {
                 this.btn_anterior.setEnabled(false);
             }
             this.btn_proxima.setEnabled(true);
-            this.label_NroFoto.setText(this.indiceCorrenteVetFoto+"/"+this.vetFoto.length);
+            this.label_NroFoto.setText(this.indiceCorrenteVetFoto + "/" + this.vetFoto.length);
             this.indiceCorrenteVetFoto--;
             ImageIcon imageIcon = new ImageIcon(this.vetFoto[this.indiceCorrenteVetFoto].getAbsolutePath());
             Image image = imageIcon.getImage(); // transform it 
@@ -481,28 +533,28 @@ public class Main extends javax.swing.JFrame {
     }
 
     private void testarPasta(String pasta) {
-       File theDir = new File(pasta);
-        if (!theDir.exists()){
+        File theDir = new File(pasta);
+        if (!theDir.exists()) {
 //            theDir.mkdirs();
             theDir.mkdir();
         }
     }
 
     private File[] getFotosDoDiretorio(File vet[]) {
-            ArrayList<File> vetAux = new ArrayList();
-            File vetResultado[] = null;
-            for (File file : vet) {
-                if (file.getName().contains(".jpg") || file.getName().contains(".png") || file.getName().contains(".jpeg")) {       
-                   vetAux.add(file);
-                }  
+        ArrayList<File> vetAux = new ArrayList();
+        File vetResultado[] = null;
+        for (File file : vet) {
+            if (file.getName().contains(".jpg") || file.getName().contains(".png") || file.getName().contains(".jpeg")) {
+                vetAux.add(file);
             }
-            if (!vetAux.isEmpty()) {
-                vetResultado = new File[vetAux.size()];
-                for (int i = 0; i < vetAux.size(); i++) {
-                    vetResultado[i] = (File) vetAux.get(i);
-                    
-                }
+        }
+        if (!vetAux.isEmpty()) {
+            vetResultado = new File[vetAux.size()];
+            for (int i = 0; i < vetAux.size(); i++) {
+                vetResultado[i] = (File) vetAux.get(i);
+
             }
-            return vetResultado;            
+        }
+        return vetResultado;
     }
 }
