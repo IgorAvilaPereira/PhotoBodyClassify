@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
@@ -299,13 +300,18 @@ public class Main extends javax.swing.JFrame {
 //          JOptionPane.showMessageDialog(null, "Você escolheu o diretório: " + diretorio.getPath());
             File caminho = new File(dir);
             File caminhoCompleto = caminho.getAbsoluteFile();
-            this.vetFotos = caminhoCompleto.listFiles();
-            ImageIcon imageIcon = new ImageIcon(this.vetFotos[0].getAbsolutePath());
-            this.posAtualVetFoto = 0;
-            Image image = imageIcon.getImage();
-            Image newimg = image.getScaledInstance(this.largura, this.altura, java.awt.Image.SCALE_SMOOTH);
-            ImageIcon newImageIcon = new ImageIcon(newimg);
-            this.imagem.setIcon(newImageIcon);
+//            this.vetFotos = caminhoCompleto.listFiles();            
+            this.vetFotos = this.getFotosDoDiretorio(caminhoCompleto.listFiles());            
+            if (this.vetFotos != null){
+                ImageIcon imageIcon = new ImageIcon(this.vetFotos[0].getAbsolutePath());
+                this.posAtualVetFoto = 0;
+                Image image = imageIcon.getImage();
+                Image newimg = image.getScaledInstance(this.largura, this.altura, java.awt.Image.SCALE_SMOOTH);
+                ImageIcon newImageIcon = new ImageIcon(newimg);
+                this.imagem.setIcon(newImageIcon);
+            } else {
+                JOptionPane.showMessageDialog(this, "Esse diretório não tem nenhuma foto!!!");
+            }
         }
     }//GEN-LAST:event_buttonActionPerformed
 
@@ -479,5 +485,23 @@ public class Main extends javax.swing.JFrame {
 //            theDir.mkdirs();
             theDir.mkdir();
         }
+    }
+
+    private File[] getFotosDoDiretorio(File vet[]) {
+            ArrayList<File> vetAux = new ArrayList();
+            File vetResultado[] = null;
+            for (File file : vet) {
+                if (file.getName().contains(".jpg") || file.getName().contains(".png")) {       
+                   vetAux.add(file);
+                }  
+            }
+            if (!vetAux.isEmpty()) {
+                vetResultado = new File[vetAux.size()];
+                for (int i = 0; i < vetAux.size(); i++) {
+                    vetResultado[i] = (File) vetAux.get(i);
+                    
+                }
+            }
+            return vetResultado;            
     }
 }

@@ -1,14 +1,13 @@
-# Classificador manual de fotos corporais
+# Latex Presentation From Figures
 
-1) Execute via terminal:
+Build Latex Presentation from your Figures Folders:
 
-```sh
-java -jar ___/dist/PhotoBodyClassify.jar___ 
-```
+1) Execute ___/dist/LatexPresentationFromFigures.jar___
 
-2) Ou dê 2 cliques no arquivo .jar (caso tenha a jdk do java corretamente instalado na máquina)
+2) Fill in the fields
 
-Obs: pode ser necessário dar permissão de execução ao .jar:
-```sh
-sudo chmod +x PhotoBodyClassify.jar # caso esteja dentro da pasta __dist__
-```
+3) Select your image folder and it's done
+
+4) A .tex file with the same name as the title will be created in the selected directory.
+
+5) Just compile the generated latex file and enjoy!
