@@ -39,6 +39,12 @@ public class Main extends javax.swing.JFrame {
         this.largura = 400;
         this.altura = 400;
         this.setResizable(false);
+        
+        this.testarPasta("./pescoco/");
+        this.testarPasta("./coxa/");
+        this.testarPasta("./costa/");
+        this.testarPasta("./perna/");
+        this.testarPasta("./braco/");
 
 //            System.exit(0);
 //            for (File imagem : vetFile) {
@@ -467,4 +473,11 @@ public class Main extends javax.swing.JFrame {
         }
     }
 
+    private void testarPasta(String pasta) {
+       File theDir = new File(pasta);
+        if (!theDir.exists()){
+//            theDir.mkdirs();
+            theDir.mkdir();
+        }
+    }
 }
