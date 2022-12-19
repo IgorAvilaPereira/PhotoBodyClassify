@@ -1,4 +1,6 @@
 # PhotoBodyClassify
 
-1) Execute java -jar ___/dist/PhotoBodyClassify.jar___
+Software que permite classificar, manualmente, fotos.
+
+Execute java -jar ___/dist/PhotoBodyClassify.jar___
 
